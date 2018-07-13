@@ -37,10 +37,15 @@ var sum = function(array) {
 
 // 3. Sum all numbers in an array containing nested arrays.
 // Example: arraySum([1,[2,3],[[4]],5]); // 15
-var arraySum = function(array, index = 0, sum = 0) {
-
-     
-    
+var arraySum = function(array) {
+    if(typeof array === 'number'){
+        return array;
+    }
+    return array.filter((iAmArray)=>{
+        return Array.isArray(iAmArray) || Number.isFinite(iAmArray);
+    }).reduce((sum, iAmNumber)=>{
+        return sum + arraySum(iAmNumber);
+    },0);
 };
 
 // 4. Check if a number is even.
@@ -184,6 +189,36 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+
+    let numerator = x;
+    let denominator = y;
+    if(numerator === 0 && denominator === 0){
+        return NaN;
+    }
+    if(numerator > 0 && denominator === 0){
+        return Infinity;
+    }
+    if(numerator < 0 && denominator === 0){
+        return -Infinity;
+    }
+    
+    if(numerator === 0 && denominator !== 0){
+        return 0;
+    }
+    if(numerator < 0 && denominator < 0){
+        return -modulo(-numerator, -denominator);
+    }
+    if(numerator < 0){
+        return -modulo(-numerator, denominator);
+    }
+    if(denominator < 0){
+        return -modulo(numerator, -denominator);
+    }
+    if(numerator < denominator){
+        return numerator;
+    }
+
+    return modulo(numerator - denominator, denominator);
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator  or
@@ -201,6 +236,32 @@ var multiply = function(x, y) {
 // 13. Write a function that divides two numbers without using the / operator  or
 // JavaScript's Math object.
 var divide = function(x, y) {
+    let numerator = x;
+    let denominator = y;
+    if(numerator === 0 && denominator === 0){
+        return NaN;
+    }
+    if(numerator > 0 && denominator === 0){
+        return Infinity;
+    }
+    if(numerator < 0 && denominator === 0){
+        return -Infinity;
+    }
+    
+    if(numerator === 0 && denominator !== 0){
+        return 0;
+    }
+    if(numerator < 0){
+        return -divide(-numerator, denominator);
+    }
+    if(denominator < 0){
+        return -divide(numerator, -denominator);
+    }
+    if(numerator < denominator){
+        return 0;
+    }
+
+    return divide(numerator - denominator, denominator) + 1;
 };
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers.  The GCD of two
@@ -226,27 +287,85 @@ var gcd = function(x, y, hasRun = false) {
 // compareStr('', '') // true
 // compareStr('tomato', 'tomato') // true
 var compareStr = function(str1, str2) {
+    if(!Array.isArray(str1)){
+        str1 = str1.slice();
+        str1 = str1.split('');
+        str2 = str2.slice();
+        str2 = str2.split('');
+    }
+    // if(str1.length !== str2.length){
+    //     return false;
+    // }
+    if(!str1.length && !str2.length){
+        return true;
+    }
+    let shift1 = str1.shift();
+    let shift2 = str2.shift();
+    if(shift1 !== shift2){
+        return false;
+    }
+
+    return compareStr(str1, str2);
 };
 
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
 var createArray = function(str){
+    let result = Array.prototype.slice.call(arguments)[1] || [];
+    if(!Array.isArray(str)){
+        var shifty = str.split('');
+    }else{
+        shifty = str;
+    }
+    if(!shifty.length){
+        return result;
+    }
+    result.push(shifty.shift());
+    return createArray(shifty, result);
 };
 
 // 17. Reverse the order of an array
 var reverseArr = function (array) {
+    let shifty = [].concat(array);
+    let reversed = Array.prototype.slice.call(arguments)[1] || [];
+
+    if(!shifty.length){
+        return reversed;
+    }
+    reversed.unshift(shifty.shift());
+    return reverseArr(shifty, reversed);
+
 };
 
 // 18. Create a new array with a given value and length.
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
 var buildList = function(value, length) {
+    let result = Array.prototype.slice.call(arguments)[2] || [];
+    if(length === 0){
+        return result;
+    }
+    result.push(value);
+    return buildList(value, length - 1, result);
 };
 
 // 19. Count the occurence of a value inside a list.
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function(array, value) {
+
+    if(array.length === 1){
+        if(array[0] === value){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+    if(array[0] === value){
+        return countOccurrence(array.slice(1), value) + 1;
+    }else{
+        return countOccurrence(array.slice(1), value) + 0;
+    }
 };
 
 // 20. Write a recursive version of map.
