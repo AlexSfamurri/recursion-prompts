@@ -19,26 +19,83 @@ var factorial = function(n) {
 // 2. Compute the sum of an array of integers.
 // Example:  sum([1, 2, 3, 4, 5, 6]);  // 21
 var sum = function(array) {
+    let shrinkingArray = [].concat(array);
+    let popValue;
+
+    if(!shrinkingArray.length){
+        return 0;
+    }
+
+    if(shrinkingArray.length === 1){
+        return shrinkingArray.pop();
+    }
+
+    popValue = shrinkingArray.pop();
+
+    return popValue + sum(shrinkingArray);
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // Example: arraySum([1,[2,3],[[4]],5]); // 15
-var arraySum = function(array) {
+var arraySum = function(array, index = 0, sum = 0) {
+
+     
+    
 };
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+
+    //preform an abs
+    if(n < 0){
+        n = 0 - n;
+    }
+
+    if(n === 0){
+        return true;
+    }
+    if(n === 1){
+        return false;
+    }
+
+    return isEven(n - 2);
+
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+    if(n === 0){
+        return 0;
+    }
+    if(n < 0){
+        let result = 0 - sumBelow(0 - n);
+        if(result === -0){
+            return 0;
+        }else{
+            return result;
+        }
+    }
+    if(n === 2){
+        return n - 1;
+    }
+    return (n - 1) + sumBelow(n - 1);
 };
 
 // 6. Get the integers in range (x, y).
 // Example:  range(2, 9);  // [3, 4, 5, 6, 7, 8]
-var range = function(x, y) {
+var range = function(x, y, result = []) {
+    if(x === y || x - y === 1 || y - x === 1){
+        return result;
+      }
+      if(y > x){
+        result.push(x + 1);
+        return range(x + 1, y, result);
+      }
+      result.push(x - 1);
+      return range(x - 1, y, result);
+    
 };
 
 // 7. Compute the exponent of a number.
@@ -47,6 +104,26 @@ var range = function(x, y) {
 // Example:  exponent(4,3);  // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+    if(exp === 0){
+        return 1;
+    }
+
+    if(exp === 1){
+        return base;
+    }
+
+    if(exp === -1){
+        return 1/base;
+    }
+    if(exp > 0){
+        if(base > 0){
+            return base * exponent(base, exp - 1)
+        }else{
+            return -exponent(-base, exp);
+        }
+    }else{
+        return 1/exponent(base, -exp);
+    }
 };
 
 // 8. Determine if a number is a power of two.
@@ -54,14 +131,51 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+    if(n === 1){
+        return true;
+    }
+    if(n < 1){
+        return false;
+    }
+
+    return powerOfTwo(n/2);
 };
 
 // 9. Write a function that accepts a string a reverses it.
 var reverse = function(string) {
+     //turn string into an array so we can manipulate it unless it is already an array
+     if(!Array.isArray(string)){
+        string = string.slice();
+        string = string.split("");
+      }
+      // if we are at the last element of the array return it to escape the recursion
+      if(string.length === 1){
+        return string[0];
+      }
+      //pops off the array and turns it into a string while concating the returns of the other recursions until the escape
+      return (string.pop()).toString() + reverse(string)
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+    let popValue;
+    let shiftValue;
+    //turn string into an array so we can manipulate it unless it is already an array
+    if(!Array.isArray(string)){
+        string = string.slice();
+        string = string.replace(/\W/g, "").toLowerCase();
+        string = string.split("");
+    }
+    if(string.length < 2){
+        return true;
+    }
+    popValue = string.pop();
+    shiftValue = string.shift();
+    if(popValue !== shiftValue){
+        return false;
+    }else{
+        return palindrome(string);
+    }
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -75,6 +189,13 @@ var modulo = function(x, y) {
 // 12. Write a function that multiplies two numbers without using the * operator  or
 // JavaScript's Math object.
 var multiply = function(x, y) {
+    if(y === 1){
+        return x;
+    }
+    if(y < 0){
+      return 0 - multiply(x, 0-y)
+    }
+    return x + multiply(x, y-1)
 };
 
 // 13. Write a function that divides two numbers without using the / operator  or
@@ -87,7 +208,16 @@ var divide = function(x, y) {
 // Example:  gcd(4,36);  // 4
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
-var gcd = function(x, y) {
+var gcd = function(x, y, hasRun = false) {
+    
+    if(x <= 0 || y < 0 || (y === 0 && hasRun === false)){
+        return null;
+    }
+    if(y === 0){
+        return x;
+    }
+    return gcd(y, x%y, true);
+    
 };
 
 // 15. Write a function that compares each character of two strings and returns true if
