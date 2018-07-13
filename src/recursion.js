@@ -353,24 +353,36 @@ var buildList = function(value, length) {
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function(array, value) {
-
+    array = [].concat(array);
+    
     if(array.length === 1){
-        if(array[0] === value){
+        if(Number.isNaN(value) && Number.isNaN(array.shift())){
+            return 1;
+        }
+        if(array.shift() === value){
             return 1;
         }else{
             return 0;
         }
     }
-    if(array[0] === value){
-        return countOccurrence(array.slice(1), value) + 1;
-    }else{
-        return countOccurrence(array.slice(1), value) + 0;
+    if(Number.isNaN(value)){
+        if(Number.isNaN(array.shift())){
+            return countOccurrence(array, value) + 1;
+        }
+        return countOccurrence(array, value) + 0;
     }
+
+    if(array.shift() === value){
+        return countOccurrence(array, value) + 1;
+    }
+    return countOccurrence(array, value) + 0;
+    
 };
 
 // 20. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function(array, callback) {
+    
 };
 
 // 21. Write a function that counts the number of times a key occurs in an object.
