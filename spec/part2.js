@@ -133,17 +133,18 @@
 
   });
 
-  // function checkForNativeMethods(runUnderbarFunction) {
-  //   it('should not use the native version of sort', function() {
-  //     // These spies are set up in testSupport.js
-  //     runUnderbarFunction();
-  //     expect(Array.prototype.indexOf.called).to.equal(false);
-  //     expect(Array.prototype.filter.called).to.equal(false);
-  //     expect(Array.prototype.sort.called).to.equal(false);
-  //   });
-  // }
-  //     checkForNativeMethods(function() {
-  //       mergeSort(numbers);
-  //     });
+  function checkForNativeMethods(runUnderbarFunction) {
+    it('should not use the native version of sort', function() {
+      // These spies are set up in testSupport.js
+      runUnderbarFunction();
+      expect(Array.prototype.indexOf.called).to.equal(false);
+      expect(Array.prototype.filter.called).to.equal(false);
+      expect(Array.prototype.sort.called).to.equal(false);
+    });
+  }
+  var numbers = [8,2,20,1,15];
+      checkForNativeMethods(function() {
+        mergeSort(numbers);
+      });
 
 }());

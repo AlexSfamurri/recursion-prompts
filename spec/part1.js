@@ -281,12 +281,12 @@
         expect(exponent(2300,1)).to.equal(2300);
       });
 
-      // it('BONUS: should accept negative integer for base', function() {
-      //   expect(exponent(-3,4)).to.equal(-81);
-      //   expect(exponent(-12,5)).to.equal(-248832);
-      //   expect(exponent(-7,2)).to.equal(-49);
-      //   expect(exponent(-7,4)).to.equal(-2401);
-      // });
+      it('BONUS: should accept negative integer for base', function() {
+        expect(exponent(-3,4)).to.equal(-81);
+        expect(exponent(-12,5)).to.equal(-248832);
+        expect(exponent(-7,2)).to.equal(-49);
+        expect(exponent(-7,4)).to.equal(-2401);
+      });
 
       it('should accept negative integer for exponent', function() {
         expect(exponent(4,-2)).to.equal(0.0625);
@@ -532,11 +532,11 @@
         expect(gcd(7, -36)).to.equal(null);
         expect(gcd(-10, -58)).to.equal(null);
         expect(gcd(-92, -5)).to.equal(null);
-        // expect(gcd(0, 0)).to.equal(null);
-        // expect(gcd(0, 5)).to.equal(null);
-        // expect(gcd(5, 0)).to.equal(null);
-        // expect(gcd(-5, 0)).to.equal(null);
-        // expect(gcd(0, -5)).to.equal(null);
+        expect(gcd(0, 0)).to.equal(null);
+        expect(gcd(0, 5)).to.equal(null);
+        expect(gcd(5, 0)).to.equal(null);
+        expect(gcd(-5, 0)).to.equal(null);
+        expect(gcd(0, -5)).to.equal(null);
       });
 
       it('should use recursion by calling self', function () {
@@ -674,7 +674,7 @@
         expect(countOccurrence(['',7,null,0,'0',false], false)).to.eql(1);
         expect(countOccurrence(['',7,null,0,'0',false], null)).to.eql(1);
         expect(countOccurrence(['',7,null,0,'0',false], '')).to.eql(1);
-        // expect(countOccurrence(['',7,null,0,NaN,'0',false], NaN)).to.eql(1);
+        expect(countOccurrence(['',7,null,0,NaN,'0',false], NaN)).to.eql(1);
       });
 
       it('should use recursion by calling self', function () {
