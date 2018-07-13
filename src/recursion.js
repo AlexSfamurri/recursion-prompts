@@ -382,7 +382,16 @@ var countOccurrence = function(array, value) {
 // 20. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function(array, callback) {
-    
+    let result = Array.prototype.slice.call(arguments)[2] || [];
+
+    if(!array.length){
+        return result;
+    }
+
+    let first = callback(array[0]);
+    let next = array.slice(1);
+    result.push(first);
+    return rMap(next, callback, result);
 };
 
 // 21. Write a function that counts the number of times a key occurs in an object.
@@ -390,6 +399,21 @@ var rMap = function(array, callback) {
 // countKeysInObj(testobj, 'r') // 1
 // countKeysInObj(testobj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+    let keyList = Object.keys(obj);
+    let index = Array.prototype.slice.call(arguments)[2] || 0;
+    let count = Array.prototype.slice.call(arguments)[3] || 0;
+
+    if(typeof obj[keyList[index]] === 'object' && obj !== null){
+        count += countKeysInObj(obj[keyList[index]], key);
+    }
+
+    if(index === keyList.length){
+        return count;
+    }
+    if(keyList[index] === key){
+        return countKeysInObj(obj, key, index + 1, count + 1);
+    }
+    return countKeysInObj(obj, key, index + 1, count);
 };
 
 // 22. Write a function that counts the number of times a value occurs in an object.
@@ -397,6 +421,22 @@ var countKeysInObj = function(obj, key) {
 // countValuesInObj(testobj, 'r') // 2
 // countValuesInObj(testobj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+    let keyList = Object.keys(obj);
+    let index = Array.prototype.slice.call(arguments)[2] || 0;
+    let count = Array.prototype.slice.call(arguments)[3] || 0;
+
+    if(typeof obj[keyList[index]] === 'object' && obj !== null){
+        count += countKeysInObj(obj[keyList[index]], value);
+    }
+
+    if(index === keyList.length){
+        return count;
+    }
+
+    if(obj[keyList[index]] === value){
+        return countValuesInObj(obj, value, index + 1, count + 1);
+    }
+    return countValuesInObj(obj, value, index + 1, count);
 };
 
 // 23. Find all keys in an object (and nested objects) by a provided name and rename
