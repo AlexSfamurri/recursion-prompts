@@ -424,9 +424,9 @@ var countValuesInObj = function(obj, value) {
     let keyList = Object.keys(obj);
     let index = Array.prototype.slice.call(arguments)[2] || 0;
     let count = Array.prototype.slice.call(arguments)[3] || 0;
-
+    
     if(typeof obj[keyList[index]] === 'object' && obj !== null){
-        count += countKeysInObj(obj[keyList[index]], value);
+        count += countValuesInObj(obj[keyList[index]], value);
     }
 
     if(index === keyList.length){
