@@ -442,25 +442,29 @@ var countValuesInObj = function(obj, value) {
 // 23. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, key, newKey) {
-    let keyList = Object.keys(obj);
-    let index = Array.prototype.slice.call(arguments)[3] || 0;
+    
 
-    if(typeof obj[keyList[index]] === 'object' && obj !== null){
-        replaceKeysInObj(obj[keyList[index]], key, newKey);
-    }
+     let index = Array.prototype.slice.call(arguments)[3] || 0;
+     let keyList = Object.keys(obj);
+     
+     if(index === keyList.length){
+         return obj;
+     }
+     if(typeof obj[keyList[index]] === 'object' && obj[keyList[index]] !== null){
+         
+         replaceKeysInObj(obj[keyList[index]], key, newKey);
+     }
+     if(keyList[index] === key){
+         
+         obj[newKey] = obj[key];
+        
+         delete obj[key];
+      
+        return replaceKeysInObj(obj, key, newKey)
+     }
 
-    if(index === keyList.length){
-        return obj;
-    }
-
-    if(keyList[index] === key){
-        let swap = obj[keyList[index]];
-        obj[newKey] === swap;
-        delete obj[key];
-        return replaceKeysInObj(obj, key, newKey, index + 1);
-    }
-
-    return replaceKeysInObj(obj, key, newKey, index + 1)
+     return replaceKeysInObj(obj, key, newKey, index + 1)
+     
 };
 
 // 24. Get the first n Fibonacci numbers.  In the Fibonacci Sequence, each subsequent
@@ -528,6 +532,13 @@ var nthFibo = function(n) {
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
 var capitalizeWords = function(input) {
+    let words = [].concat(input);
+
+    if(!words.length){
+        return [];
+    }
+
+    return capitalizeWords(words).push(words.pop().toUpperCase)
 };
 
 // 27. Given an array of strings, capitalize the first letter of each index.
@@ -544,7 +555,22 @@ var capitalizeFirst = function(array) {
 //   e: {e: {e: 2}, ee: 'car'}
 // };
 // nestedEvenSum(obj1); // 10
-var nestedEvenSum = function(obj) {
+var nestedEvenSum = function(obj, index = 0, sum = 0) {
+    let keyList = Object.keys(obj);
+    
+    if(index === keyList.length){
+        return sum;
+    }
+    if(obj[keyList[index]] % 2 === 0){
+        sum += obj[keyList[index]];
+        return nestedEvenSum(obj, index + 1, sum);
+    }
+    if(typeof obj[keyList[index]] === 'object' && obj[keyList[index]] !== null){
+        sum = sum + nestedEvenSum(obj[keyList[index]]);
+    }
+
+    return nestedEvenSum(obj, index + 1, sum);
+
 };
 
 // 29. Flatten an array containing nested arrays.
@@ -568,7 +594,7 @@ var letterTally = function(str, obj = {}) {
     if(index === str.length){
         return obj;
     }
-    console.log(obj);
+    
     if(obj[str[index]] === undefined){
         obj[str[index]] = 1;
         return letterTally(str, obj, index + 1);
