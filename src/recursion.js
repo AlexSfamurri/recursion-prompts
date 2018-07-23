@@ -749,11 +749,73 @@ var tagCount = function(tag, node) {
 // Sample array:  [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 // console.log(binarySearch(5)) will return '5'
 
-var binarySearch = function(array, target, min, max) {
+var binarySearch = function(array, target, min, max, count = 0) {
+    //sets the start index
+    let start = min || 0;
+    //sets the end index
+    let end = max || array.length -1;
+    //sets the middle index
+    let middle = Math.floor((start + end)/2);
+    //if target is not a number
+    if(/\D/.test(target)){
+        return null;
+    }
+    
+    //if the target is greater than the last element or smaller than the first element
+    //of we have looped a number of times to be greater than half of all the elements in the array
+    if(target > array[end] || target < array[start] || count > array.length/2){
+        return null;
+    }
+    //if the target equals the elemnt at start
+    if(target === array[start]){
+        //return the start value
+        return start;
+    }
+    //if the target equals the element at the end
+    if(target === array[end]){
+        //return the end index
+        return end;
+    }
+    if(target === array[middle]){
+        return middle;
+    }
+    if(target > array[middle]){
+        return binarySearch(array, target, middle, end, count + 1);
+    }
+    if(target < array[middle]){
+        return binarySearch(array, target, start, middle, count + 1);
+    }
+    return binarySearch(array, target, start, end, count + 1);
 };
 
 // 38. Write a merge sort function.
 // Sample array:  [34,7,23,32,5,62]
 // Sample output: [5,7,23,32,34,62]
-var mergeSort = function(array) {
+var mergeSort = function(array, newArray = [].concat(array)) {
+    
+        if(newArray.length <= 1) return newArray;
+        //divide and conquer
+        let lowHalf = newArray.splice(0, Math.floor(newArray.length/2));
+        //seperate into n
+        mergeSort(array, lowHalf);
+        mergeSort(array, newArray);
+        //starting index for the outer
+        let start = 0;
+
+        outer: while(lowHalf.length){
+            for(let i = start; i < newArray.length; i++){
+                if(lowHalf[0] <= newArray[i]){
+                    newArray.splice(i, 0, lowHalf.shift());
+                    start = i + 1;
+                    continue outer;
+                }
+            }
+            newArray.push(lowHalf.shift());
+            start = newArray.length;
+        }
+
+        if(newArray.length === array.length){
+            return newArray;
+        }
+
 };
