@@ -326,13 +326,18 @@ var createArray = function(str){
 
 // 17. Reverse the order of an array
 var reverseArr = function (array) {
+    //create a free standing array so i can shift it
     let shifty = [].concat(array);
+    //create a reversed array arrg
     let reversed = Array.prototype.slice.call(arguments)[1] || [];
-
+    //if shifty is empty then we should have filled reversed
     if(!shifty.length){
+        //send the finished reversed all the way back
         return reversed;
     }
+    //so to populate our reversed array we will keep push into the front (unshift) of the array the values pulled from the front of the original array (shift)
     reversed.unshift(shifty.shift());
+    //recurse
     return reverseArr(shifty, reversed);
 
 };
@@ -341,11 +346,16 @@ var reverseArr = function (array) {
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
 var buildList = function(value, length) {
+    //create a result arg to store the array created and growing array
     let result = Array.prototype.slice.call(arguments)[2] || [];
+    //if length is equal to 0
     if(length === 0){
+        //send back whatever our result looks like after all the recursion or an empty array if no recursion occured
         return result;
     }
+    //push the value into our results array
     result.push(value);
+    //recurse and decrement length
     return buildList(value, length - 1, result);
 };
 
@@ -353,28 +363,40 @@ var buildList = function(value, length) {
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function(array, value) {
+    //create a free standing array
     array = [].concat(array);
-    
+    //if our array only has 1 element
     if(array.length === 1){
+        //if the test value is not a number and the first element of our array is not a number
         if(Number.isNaN(value) && Number.isNaN(array.shift())){
+            //return 1
             return 1;
         }
+        //if the first value is equal to the value
         if(array.shift() === value){
+            //return 1
             return 1;
         }else{
+            //otherwise return just 0
             return 0;
         }
     }
+    //if the value is not a number
     if(Number.isNaN(value)){
+        //if the first value of the array is not a number
         if(Number.isNaN(array.shift())){
+            //recurse and add 1 to whatever value that is returned
             return countOccurrence(array, value) + 1;
         }
+        //recurse and add 0 to whatever value is returned
         return countOccurrence(array, value) + 0;
     }
-
+    //if the first element of the array is equal to the value
     if(array.shift() === value){
+        //recurse and add 1 to the value that is returned
         return countOccurrence(array, value) + 1;
     }
+    //recurse and add 0 to the value that is returned
     return countOccurrence(array, value) + 0;
     
 };
@@ -382,15 +404,20 @@ var countOccurrence = function(array, value) {
 // 20. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function(array, callback) {
+    //create a result arg to store our result array
     let result = Array.prototype.slice.call(arguments)[2] || [];
-
+    //if our shrinking array is empty
     if(!array.length){
+        //return the result array
         return result;
     }
-
+    //create our modified element after passing the first value of the array into the callback function
     let first = callback(array[0]);
+    //create a sliced array that does not include the first variable
     let next = array.slice(1);
+    //grow our result array with the modified value
     result.push(first);
+    //recurse
     return rMap(next, callback, result);
 };
 
@@ -399,20 +426,28 @@ var rMap = function(array, callback) {
 // countKeysInObj(testobj, 'r') // 1
 // countKeysInObj(testobj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+    //creates a list of the keys in object
     let keyList = Object.keys(obj);
+    //creates an index counter
     let index = Array.prototype.slice.call(arguments)[2] || 0;
+    //creates a count counter
     let count = Array.prototype.slice.call(arguments)[3] || 0;
-
+    //if the value at the current key in the obj is an object and not null
     if(typeof obj[keyList[index]] === 'object' && obj !== null){
+        //increment count by how much it would change after this recurse
         count += countKeysInObj(obj[keyList[index]], key);
     }
-
+    //if our index counter is equal the length of our keylist
     if(index === keyList.length){
+        //return our count total
         return count;
     }
+    //if the current key at the index is equal to our key arg
     if(keyList[index] === key){
+        //recurse and increment index and count
         return countKeysInObj(obj, key, index + 1, count + 1);
     }
+    //recurse and increment index
     return countKeysInObj(obj, key, index + 1, count);
 };
 
@@ -421,21 +456,28 @@ var countKeysInObj = function(obj, key) {
 // countValuesInObj(testobj, 'r') // 2
 // countValuesInObj(testobj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+    //create a list of all the keys in obj
     let keyList = Object.keys(obj);
+    //create an index counter
     let index = Array.prototype.slice.call(arguments)[2] || 0;
+    //create a count counter
     let count = Array.prototype.slice.call(arguments)[3] || 0;
-    
+    //if the value at the current key in the obj is an object and not null
     if(typeof obj[keyList[index]] === 'object' && obj !== null){
+        //increment count by how much it would change after this recurse
         count += countValuesInObj(obj[keyList[index]], value);
     }
-
+    //if our index counter is equal the length of our keylist
     if(index === keyList.length){
+        //return our count total
         return count;
     }
-
+    //if the value at the current key of the object is equal to the value we are counting
     if(obj[keyList[index]] === value){
+        //recurse and increment count and index
         return countValuesInObj(obj, value, index + 1, count + 1);
     }
+    //recurse and increment index but not count
     return countValuesInObj(obj, value, index + 1, count);
 };
 
@@ -443,26 +485,30 @@ var countValuesInObj = function(obj, value) {
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, key, newKey) {
     
-
+    //create an index counter to be used throught the recursion
      let index = Array.prototype.slice.call(arguments)[3] || 0;
+     //create a list of all the keys in obj
      let keyList = Object.keys(obj);
-     
+     //if index is equal to the keylist length
      if(index === keyList.length){
+         //return the final object
          return obj;
      }
+     //if the current key's value is an object and not null
      if(typeof obj[keyList[index]] === 'object' && obj[keyList[index]] !== null){
-         
+         //recurse to dive
          replaceKeysInObj(obj[keyList[index]], key, newKey);
      }
+     //if the this key is the same as the target key we need to change
      if(keyList[index] === key){
-         
+         //apply the new key with the old key's paired value
          obj[newKey] = obj[key];
-        
+        //delete the old key from the obj
          delete obj[key];
-      
+        //recurse
         return replaceKeysInObj(obj, key, newKey)
      }
-
+     //recurse
      return replaceKeysInObj(obj, key, newKey, index + 1)
      
 };
@@ -876,23 +922,28 @@ var binarySearch = function(array, target, min, max, count = 0) {
         //return the end index
         return end;
     }
+    //if the target is equal to the middle
     if(target === array[middle]){
+        //than we found the target index
         return middle;
     }
+    //if our target is greater than the middle
     if(target > array[middle]){
+        //recurse with middle being the new start
         return binarySearch(array, target, middle, end, count + 1);
     }
+    //if our target is less than the middle
     if(target < array[middle]){
+        //recurse with our middle being the new end
         return binarySearch(array, target, start, middle, count + 1);
     }
-    return binarySearch(array, target, start, end, count + 1);
 };
 
 // 38. Write a merge sort function.
 // Sample array:  [34,7,23,32,5,62]
 // Sample output: [5,7,23,32,34,62]
 var mergeSort = function(array, newArray = [].concat(array)) {
-    
+        //if our newarray has one or fewer elements just return it
         if(newArray.length <= 1) return newArray;
         //divide and conquer
         let lowHalf = newArray.splice(0, Math.floor(newArray.length/2));
@@ -901,20 +952,28 @@ var mergeSort = function(array, newArray = [].concat(array)) {
         mergeSort(array, newArray);
         //starting index for the outer
         let start = 0;
-
+        //discovered there is a way to name loops
         outer: while(lowHalf.length){
+            //run a for loop starting at start until we reach the end of the new array
             for(let i = start; i < newArray.length; i++){
+                //if the first element of our lower half is less than the current element of our newarray
                 if(lowHalf[0] <= newArray[i]){
+                    //we splice in the value of our first element in lowhalf to just before the current element 
                     newArray.splice(i, 0, lowHalf.shift());
+                    //we increment our start counter
                     start = i + 1;
+                    //we jump back to the while loop and restart the forloop until lowhalf is empty
                     continue outer;
                 }
             }
+            //the value at lowHalf is greater so we push it to the end
             newArray.push(lowHalf.shift());
+            //we reset start to the length of new array
             start = newArray.length;
         }
-
+        //if our newarray is equal in length to our original array
         if(newArray.length === array.length){
+            //return the sorted new array
             return newArray;
         }
 
