@@ -473,25 +473,35 @@ var replaceKeysInObj = function(obj, key, newKey) {
 // fibonacci(5);  // [0, 1, 1, 2, 3, 5]
 // Note:  The 0 is not counted.
 var fibonacci = function(n) {
-    
+    //create our empty fib array to grow as we recurse
     let fib = Array.prototype.slice.call(arguments)[1] || [];
+    //create a counter that we can increment untilw e equal n
     let count = Array.prototype.slice.call(arguments)[2] || 0;
+    //if fib is currently epmty
     if(!fib.length){
+        //set the first value in the fib array to 0
         fib.push(0);
     }
-
+    //if n is negative
     if(n <= 0){
+        //n is not a valid value so we return null
         return null;
     }
+    //if n is equal to the number of index's in our array
     if(n === fib.length - 1){
+        //return the fibonaccis array
         return fib;
     }
+    //if our fib array has only one item in it
     if(fib.length === 1){
+        //prime our fibonacci array with a 1 so that the recurrsion can create the rest
         fib.push(1);
+        //recurse
         return fibonacci(n, fib, count + 1);
     }
+    //follow the fibo algorithm which is the next value is equal to the current value plus the last value
     fib.push(fib[count] + fib[count - 1]);
-
+    //recurse
     return fibonacci(n, fib, count + 1);
 
     
@@ -506,25 +516,35 @@ var fibonacci = function(n) {
 // nthFibo(7); // 13
 // nthFibo(3); // 2
 var nthFibo = function(n) {
+    //create an array that will be populated as a fibonacci sequence
     let fib = Array.prototype.slice.call(arguments)[1] || [];
+    //create a counter variable
     let count = Array.prototype.slice.call(arguments)[2] || 0;
+    //if our fib has no lengt currenty
     if(!fib.length){
+        //push 0 as our starting value of this fibo array
         fib.push(0);
     }
-
+    //if n is less then 0
     if(n < 0){
+        //this is invalid so we return null
         return null;
     }
-    
+    //n is equal the the last index of our growing fib array
     if(n === fib.length - 1){
+        //return the value at the nth index
         return fib[n];
     }
+    //if we only have 1 value in our fib array
     if(fib.length === 1){
+        //we need to put a 1 inside to prime the fibonaccis sequence
         fib.push(1);
+        //recurse
         return nthFibo(n, fib, count + 1);
     }
+    //we need to create our fibonaccis sequence by adding the current value plus the last value to equal the next value
     fib.push(fib[count] + fib[count - 1]);
-
+    //recurse
     return nthFibo(n, fib, count + 1);
 };
 
@@ -532,17 +552,17 @@ var nthFibo = function(n) {
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
 var capitalizeWords = function(input, index = 0) {
-    if(!Array.isArray(input)){
-        input = input.split(' ');
-    }
-
+    
+    // rename our input array to words for easy of read
     let words = input;
+    //if our index is equal to the length of words array
     if(words.length === index){
+        //return our words array
         return words;
     }
-
+    //at our current index we will reassign the value after being uppercased
     words[index] = words[index].toUpperCase();
-
+    //recurse
     return capitalizeWords(words, index + 1);
 
 };
@@ -550,15 +570,17 @@ var capitalizeWords = function(input, index = 0) {
 // 27. Given an array of strings, capitalize the first letter of each index.
 // capitalizeFirst(['car', 'poop', 'banana']); // ['Car', 'Poop', 'Banana']
 var capitalizeFirst = function(array, index = 0) {
-    if(!Array.isArray(array)){
-        array = array.split(' ');
-    }
+   
+    //for easy of use lets call array words
     let words = array;
+    //if or words length is equal to
     if(words.length === index){
+        //return our finished project
         return words;
     }
+    //we then look at our current woord and reassign it with the first part of the string uppcased and the rest tacked on
     words[index] = words[index].substring(0, 1).toUpperCase() + words[index].substring(1);
-
+    //recurse
     return capitalizeFirst(words, index + 1);
 };
 
@@ -572,19 +594,26 @@ var capitalizeFirst = function(array, index = 0) {
 // };
 // nestedEvenSum(obj1); // 10
 var nestedEvenSum = function(obj, index = 0, sum = 0) {
+    //create an array of the obj's keys
     let keyList = Object.keys(obj);
-    
+    //if our index equals the length of our key list
     if(index === keyList.length){
+        //return the value of our sum
         return sum;
     }
+    //if our obj's key's value is even
     if(obj[keyList[index]] % 2 === 0){
+        //add this value to our sum
         sum += obj[keyList[index]];
+        //recurse
         return nestedEvenSum(obj, index + 1, sum);
     }
+    //if our current key is an object
     if(typeof obj[keyList[index]] === 'object' && obj[keyList[index]] !== null){
+        //recurse and update the sum if the sum were to grow in the nest
         sum = sum + nestedEvenSum(obj[keyList[index]]);
     }
-
+    //recurse
     return nestedEvenSum(obj, index + 1, sum);
 
 };
@@ -592,12 +621,18 @@ var nestedEvenSum = function(obj, index = 0, sum = 0) {
 // 29. Flatten an array containing nested arrays.
 // Example: flatten([1,[2],[3,[[4]]],5]); // [1,2,3,4,5]
 var flatten = function(arrays) {
+    //if our arrays argument is actually a number
     if(typeof arrays === 'number'){
+        //return the number
         return arrays;
     }
+    //here we return the array that is filtered between wheter it is a number or an array
     return arrays.filter((iAmArray)=>{
+        //we check to see if we have an array or a number that is finite
         return Array.isArray(iAmArray) || Number.isFinite(iAmArray);
+        //we then reduce to create a flattened array by check to see if it is a number or not
     }).reduce((flat, iAmNumber)=>{
+        //we return our array as it grow. we concat it with the return falue of our recursive flatten function
         return flat.concat(flatten(iAmNumber));
     },[]);
 };
@@ -605,19 +640,23 @@ var flatten = function(arrays) {
 // 30. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {'p':1, 'o':2, 't':2, 'a':1}
 var letterTally = function(str, obj = {}) {
+    //create an index counter
     let index = Array.prototype.slice.call(arguments)[2] || 0;
-
+    //if our index is equal to the length of our str then we have finished
     if(index === str.length){
+        //return our populated obj
         return obj;
     }
-    
+    //if the key at the obj is undefined
     if(obj[str[index]] === undefined){
+        //set its value to 1
         obj[str[index]] = 1;
+        //recurse
         return letterTally(str, obj, index + 1);
     }
-
+    //increment the current keys value
     obj[str[index]] = obj[str[index]] + 1;
-
+    //recurse
     return letterTally(str, obj, index + 1);
 
 };
@@ -628,16 +667,23 @@ var letterTally = function(str, obj = {}) {
 // Example: compress([1, 2, 2, 3, 4, 4, 5, 5, 5]) // [1, 2, 3, 4, 5]
 // Example: compress([1, 2, 2, 3, 4, 4, 2, 5, 5, 5, 4, 4]) // [1, 2, 3, 4, 2, 5, 4]
 var compress = function(list) {
+    //create an arrg to hold the compressed new comressed array
     let compressed = Array.prototype.slice.call(arguments)[1] || [];
+    //create an arrg to hold an index counter
     let index = Array.prototype.slice.call(arguments)[2] || 0;
-
+    //if our index has reached the end of the list length we have reached an end
     if(index === list.length){
+        //return the compressed array
         return compressed;
     }
+    //if our current index does not equal the last index
     if(list[index] !== list[index - 1]){
+        //add the current value at this index into the compressed array
         compressed.push(list[index]);
+        //recurse
         return compress(list, compressed, index + 1);
     }
+    //recurse
     return compress(list, compressed, index + 1);
 };
 
@@ -645,18 +691,24 @@ var compress = function(list) {
 // itself.
 // Example: augmentElements([[],[3],[7]], 5); // [[5],[3,5],[7,5]]
 var augmentElements = function(array, aug) {
+    //create a free standing array that has all the values of the array that was passed inside
     let freeArray = [].concat(array);
+    //create an index counter array
     let index = Array.prototype.slice.call(arguments)[2] || 0;
 
-
+    //if our index counter is equal to the length of our freestanding array then we have reached the end
     if(index === freeArray.length){
-        
+        //return our free standing array
         return freeArray;
     }
+    //if the current element is an array
     if(Array.isArray(freeArray[index])){
+        //make the array within this array a free standing array
+        freeArray[index] = [].concat(freeArray[index]); 
+        //push the aug argument into the array that is at the free standing current index
         freeArray[index].push(aug);
     }
-
+    //recurse
     return augmentElements(freeArray, aug, index + 1);
 };
 
@@ -664,21 +716,30 @@ var augmentElements = function(array, aug) {
 // minimizeZeroes([2,0,0,0,1,4]) // [2,0,1,4]
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
 var minimizeZeroes = function(array) {
-    
+    //create a default parameter for index to be used as a counter
     let index = Array.prototype.slice.call(arguments)[1] || 0;
+    //create an empty array as a default parameter to store the array with the minimized 
     let results = Array.prototype.slice.call(arguments)[2] || [];
+    //if our index counter is equal to the length of the array we have reached the end
     if(index === array.length){
+        //return the array we created with results
         return results;
     }
-
+    //if the current value is 0 and the previous value is not 0
     if(array[index] === 0 && array[index - 1] !== 0){
+        //put this into our results array
         results.push(array[index]);
+        //recurse
         return minimizeZeroes(array, index + 1, results);
     }
+    //if our current value is not equal to 0
     if(array[index] !== 0){
+        //add the current value to the results array
         results.push(array[index]);
+        //recurse
         return minimizeZeroes(array, index + 1, results);
     }
+    //recurse
     return minimizeZeroes(array, index + 1, results);
 };
 
@@ -687,23 +748,31 @@ var minimizeZeroes = function(array) {
 // alternateSign([2,7,8,3,1,4]) // [2,-7,8,-3,1,-4]
 // alternateSign([-2,-7,8,3,-1,4]) // [2,-7,8,-3,1,-4]
 var alternateSign = function(array) {
+    //we create a clean array so as to not mutate the original array that was passed in to create a pure function
     array = [].concat(array);
+    //we create a default parameter called index that will be used as a counter
     let index = Array.prototype.slice.call(arguments)[1] || 0;
-
+    //if our index is equal to our array then we have reached the end
     if(index === array.length){
-        
+        //when we reach the end we return the altered array
         return array;
     }
-
+    //if our index is even
     if(index % 2 === 0){
+        //if or value is negative
         if(array[index] < 0){
+            //make it positive
             array[index] *= -1;
         }
+    //else if our index is odd
     }else{
+        //if our value is positive
         if(array[index] > 0){
+            //make our value negative
             array[index] *= -1;
         }
     }
+    //recurse
     return alternateSign(array, index + 1);
 };
 
@@ -711,7 +780,9 @@ var alternateSign = function(array) {
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
 var numToText = function(str) {
+    //create a default variable index
     let index = Array.prototype.slice.call(arguments)[1] || 0;
+    //an object that keys are the number strings with words numbers as their values inorder to make the swap
     let numToStr = {
         '1' : 'one',
         '2' : 'two',
@@ -724,18 +795,21 @@ var numToText = function(str) {
         '9' : 'nine',
         '0' : 'zero'
     }
-
+    //test to see if our str is a string, we then break the str into an array
     if(typeof str === 'string') str = str.split(' ');
-
+    //if our index counter is equal to the length of the array we have run through the entirity of it
     if(index === str.length){
+        //we take our array and turn it back into a string
         return str.join(' ');
     }
-
+    //if this postion of our array's value is a key in our object
     if(numToStr[str[index]]){
+        //we reassign the current indexed value to the value at the key in our object
         str[index] = numToStr[str[index]];
+        //we recurse and increment our index by 1
         return numToText(str, index + 1);
     }
-
+    //nothing happend and we have not reached then end so we recurse and increment index by 1
     return numToText(str, index + 1);
 };
 
@@ -743,8 +817,31 @@ var numToText = function(str) {
 
 // 36. Return the number of times a tag occurs in the DOM.
 var tagCount = function(tag, node) {
-
+    // var getElementsByClassName = function(className) {
+    //     // your code here
+    //     let elementCollection = [];
+    //     let recurse = (node) => {
+    //       if(node.classList && node.classList.contains(className)){
+    //         elementCollection.push(node)
+    //       }
+    //       if(node.childNodes){
+    //         _.each(node.childNodes, (item)=>{
+    //           recurse(item);
+    //         })
+    //       }
+    //     }
+    //     recurse(document.body);
+    //     return elementCollection;
+    //   };
+      
     console.log(tag);
+    console.log(node);
+    //intialize node
+    if(node === undefined){
+        node = document.getElementsByTagName(tag);;
+    }
+
+    //condtion that returns 0 for not finding the tag at the lowest level
     console.log(node);
 };
 
