@@ -5,45 +5,53 @@
 // Example:  5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5);  // 120
 var factorial = function(n) {
+    //if n is less than 0
     if(n < 0){
+        //it is an invalid result so null
         return null;
     }
-
+    //if n is less than or equal to 1
     if(n <= 1){
+        //return 1
         return 1;
     }
-
+    //we then multiple n times the recurse which takes a decrementing n
     return n * factorial(n - 1);
 };
 
 // 2. Compute the sum of an array of integers.
 // Example:  sum([1, 2, 3, 4, 5, 6]);  // 21
 var sum = function(array) {
+    //create our shrinking arry to not mutate our original array
     let shrinkingArray = [].concat(array);
+    //create a variable to store our pop() value
     let popValue;
-
+    //if our shrinking array is empty
     if(!shrinkingArray.length){
+        //return 0
         return 0;
     }
-
-    if(shrinkingArray.length === 1){
-        return shrinkingArray.pop();
-    }
-
+    //create our popvalue to the popped value from our shrinking array
     popValue = shrinkingArray.pop();
-
+    //return our popvalue plus our recurse result
     return popValue + sum(shrinkingArray);
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // Example: arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
+    //if our array is a number
     if(typeof array === 'number'){
+        //return our "number"
         return array;
     }
+    //return a filtered then reduced sum of our array
     return array.filter((iAmArray)=>{
+        //filters between whether we have an array or a number for each element
         return Array.isArray(iAmArray) || Number.isFinite(iAmArray);
+        //after creating said array we then apply reduce
     }).reduce((sum, iAmNumber)=>{
+        //we then create a sum that is equal to our sum + our recurse of arraySum, which will either take just a number or another array
         return sum + arraySum(iAmNumber);
     },0);
 };
@@ -53,16 +61,19 @@ var isEven = function(n) {
 
     //preform an abs
     if(n < 0){
-        n = 0 - n;
+        n = -n;
     }
-
+    //if n is equal to 0
     if(n === 0){
+        //than we had an even number
         return true;
     }
+    //if n is equal to 1
     if(n === 1){
+        //then we had an odd ball
         return false;
     }
-
+    //recurse
     return isEven(n - 2);
 
 };
@@ -71,34 +82,51 @@ var isEven = function(n) {
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+    //if n is equal to 0
     if(n === 0){
+        //return 0
         return 0;
     }
+    //if n is less than 0
     if(n < 0){
-        let result = 0 - sumBelow(0 - n);
+        //create a result variable that is equal to the result of the recurse of n and holds on to the negative after using the abs of n
+        let result = -sumBelow(-n);
+        //if our result is equal to -0
         if(result === -0){
+            //we will just return 0
             return 0;
         }else{
+            //otherwise we will return the result
             return result;
         }
     }
+    //if new is strictly equal to 2
     if(n === 2){
+        //we will return n - 1 or 1
         return n - 1;
     }
+    //recurse by add n-1 to the recurse of n - 1 
     return (n - 1) + sumBelow(n - 1);
 };
 
 // 6. Get the integers in range (x, y).
 // Example:  range(2, 9);  // [3, 4, 5, 6, 7, 8]
 var range = function(x, y, result = []) {
+    //if both x and y are equal or if the difference between the two of them is 1
     if(x === y || x - y === 1 || y - x === 1){
+        //return our result
         return result;
       }
+      //if y is greater than x
       if(y > x){
+        //push x + 1 into our result array
         result.push(x + 1);
+        //recurse and increment x
         return range(x + 1, y, result);
       }
+      //push in x -1 into our results array since it is larger than y
       result.push(x - 1);
+      //recurse and decrement x
       return range(x - 1, y, result);
     
 };
@@ -922,11 +950,11 @@ var tagCount = function(tag, node) {
     console.log(node);
     //intialize node
     if(node === undefined){
-        node = document.getElementsByTagName(tag);;
+        node = document.body;
     }
 
     //condtion that returns 0 for not finding the tag at the lowest level
-    console.log(node);
+    console.log(node.childNodes);
 };
 
 // 37. Write a function for binary search.
