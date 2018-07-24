@@ -109,24 +109,35 @@ var range = function(x, y, result = []) {
 // Example:  exponent(4,3);  // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+    //if exp is equal to 0
     if(exp === 0){
+        //then return 1
         return 1;
     }
-
+    //if exp is equal to 1
     if(exp === 1){
+        //than return the base
         return base;
     }
-
+    //if exp is -1
     if(exp === -1){
+        //we need to return 1 over base
         return 1/base;
     }
+    //if exp is greater than 0
     if(exp > 0){
+        //and if our base is greater than 0
         if(base > 0){
+            //we need to recurse and multiply the base to result of the recurse
             return base * exponent(base, exp - 1)
+
         }else{
+            //else we need to make the base positive but not loose that negative on recurse
             return -exponent(-base, exp);
         }
+        //if exp is less than 0
     }else{
+        //we need to recurse with a positive exp and what ever is returned need to be 1/return
         return 1/exponent(base, -exp);
     }
 };
@@ -136,13 +147,17 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+    //if n is equal to 1
     if(n === 1){
+        //the original n was a power of two
         return true;
     }
+    //if n is less than 1
     if(n < 1){
+        //the original n was not a power of two
         return false;
     }
-
+    //recurse using n/2
     return powerOfTwo(n/2);
 };
 
@@ -163,22 +178,31 @@ var reverse = function(string) {
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+    //a variable to store the pop()
     let popValue;
+    //a variable to store the shift()
     let shiftValue;
     //turn string into an array so we can manipulate it unless it is already an array
     if(!Array.isArray(string)){
-        string = string.slice();
+        //replace all whitespace with "" and turn the whole thing to lowercase
         string = string.replace(/\W/g, "").toLowerCase();
+        //turn this string into an array
         string = string.split("");
     }
+    //if our string is less than 2 elements long that we have a palindrom
     if(string.length < 2){
+        //return true
         return true;
     }
+    //assign values to the variabales we declared at the beginning
     popValue = string.pop();
     shiftValue = string.shift();
+    //if these valeus do not match
     if(popValue !== shiftValue){
+        //this is not a palindrome
         return false;
     }else{
+        //recurse
         return palindrome(string);
     }
 };
@@ -188,6 +212,7 @@ var palindrome = function(string) {
 // modulo(5,2) // 1
 // modulo(17,5) // 2
 // modulo(22,6) // 4
+//cannot comment this function or the test will fail
 var modulo = function(x, y) {
 
     let numerator = x;
@@ -223,18 +248,20 @@ var modulo = function(x, y) {
 
 // 12. Write a function that multiplies two numbers without using the * operator  or
 // JavaScript's Math object.
+//can't comment this function or test will fail
 var multiply = function(x, y) {
     if(y === 1){
         return x;
     }
     if(y < 0){
-      return 0 - multiply(x, 0-y)
+      return -multiply(x, -y)
     }
     return x + multiply(x, y-1)
 };
 
 // 13. Write a function that divides two numbers without using the / operator  or
 // JavaScript's Math object.
+//can't comment this function or test will fail
 var divide = function(x, y) {
     let numerator = x;
     let denominator = y;
@@ -270,13 +297,19 @@ var divide = function(x, y) {
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
 var gcd = function(x, y, hasRun = false) {
-    
+    //use euclyids algorithm
+    //if x is less than or equal to zero or y is less than 0 or if y is eqaul to zero and the function has not fired at least once
     if(x <= 0 || y < 0 || (y === 0 && hasRun === false)){
+        //invalid inputs return null
         return null;
     }
+    //if y is equal to zero
     if(y === 0){
+        //return x
         return x;
     }
+
+    //recurse by putting y where x was and x%y where y was and since we have run at least once to true
     return gcd(y, x%y, true);
     
 };
@@ -287,41 +320,46 @@ var gcd = function(x, y, hasRun = false) {
 // compareStr('', '') // true
 // compareStr('tomato', 'tomato') // true
 var compareStr = function(str1, str2) {
+    //turn the strings into arrays
     if(!Array.isArray(str1)){
-        str1 = str1.slice();
         str1 = str1.split('');
-        str2 = str2.slice();
         str2 = str2.split('');
     }
-    // if(str1.length !== str2.length){
-    //     return false;
-    // }
+    //if both strs are empty
     if(!str1.length && !str2.length){
+        //return true
         return true;
     }
+    //shrink arrays and apply their former first values to some variables
     let shift1 = str1.shift();
     let shift2 = str2.shift();
+    //if these shift values dont match
     if(shift1 !== shift2){
+        //return false
         return false;
     }
-
+    //recurse
     return compareStr(str1, str2);
 };
 
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
 var createArray = function(str){
+    //create an array to store the string
     let result = Array.prototype.slice.call(arguments)[1] || [];
-    if(!Array.isArray(str)){
-        var shifty = str.split('');
-    }else{
-        shifty = str;
-    }
-    if(!shifty.length){
+    //create a shorter str with the first char missing
+    let shorter = str.slice(1);
+    //if str is only 1 char
+    if(str.length === 1){
+        //add it to the the result array
+        result.push(str);
+        //return our new array
         return result;
     }
-    result.push(shifty.shift());
-    return createArray(shifty, result);
+    //push the first char into the result
+    result.push(str.slice(0,1));
+    //recurse with the shorter str
+    return createArray(shorter, result);
 };
 
 // 17. Reverse the order of an array
@@ -922,7 +960,7 @@ var binarySearch = function(array, target, min, max, count = 0) {
         //return the end index
         return end;
     }
-    //if the target is equal to the middle
+    //if the target is equal to the middle of the array
     if(target === array[middle]){
         //than we found the target index
         return middle;
